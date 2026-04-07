@@ -1,0 +1,251 @@
+package rentalcars;
+
+public class Vehicle {
+	
+	private Manufacturer manufacturer;
+	private String model;
+	private int year;
+	private Color color;
+	private double price;
+	private int numberOfSeats;
+	private Status status;
+	private boolean available;
+	private int gasTankSize;
+	private int miles;
+	private String[] reservations;
+	private int waiting;
+	
+
+	//Default Constructor
+	public Vehicle() {
+		this.manufacturer = Manufacturer.OTHER;
+		this.model = "Unknown";
+		this.year = 2000;
+		this.color = Color.OTHER;
+		this.price = 100.00;
+		this.numberOfSeats = 4;
+		this.status = Status.WORKING;
+		this.available = true;
+		this.gasTankSize = 12;
+		this.miles = 0;
+		this.waiting = 0;
+	}
+	
+	//Parameterized Constructor
+	public Vehicle(Manufacturer mM, String sM, int iY, Color cC, double dP, int iN, Status sS, int iG, int iM) {
+		this.setManufacturer(mM);
+		this.setModel(sM);
+		this.setYear(iY);
+		this.setColor(cC);
+		this.setPrice(dP);
+		this.setNumberOfSeats(iN);
+		this.setStatus(sS);
+		this.setGasTankSize(iG);
+		this.setMiles(iM);
+		this.available = true;
+		this.waiting = 0;
+	}
+	
+	
+	//Accessors
+	public Manufacturer getManufacturer() {
+		return this.manufacturer;
+	}
+	
+	public String getModel() {
+		return this.model;
+	}
+	
+	public int getYear() {
+		return this.year;
+	}
+	
+	public Color getColor() {
+		return this.color;
+	}
+	
+	public double getPrice() {
+		return this.price;
+	}
+	
+	public int getNumberOfSeats() {
+		return this.numberOfSeats;
+	}
+	
+	public Status getStatus() {
+		return this.status;
+	}
+	
+	public boolean getAvailable() {
+		return this.available;
+	}
+	
+	public int getGasTankSize() {
+		return this.gasTankSize;
+	}
+	
+	public int getMiles() {
+		return this.miles;
+	}
+	
+	//Return all reserved users/names
+	public String getReservations() {
+		//StringBuilder - can convert array of string to a string
+		StringBuilder gR = new StringBuilder();
+		
+		//Check if empty
+		if(this.waiting == 0) {
+			return "No Reservations";
+		}
+		
+		//Print current user
+		gR.append("Current : " + this.reservations[0]);
+		
+		//Only print if there are people in the waiting reservation
+		if(this.waiting > 1) {
+			gR.append(" Waiting:");
+			
+			//Add each one in waiting
+			for(int i = 1; i <= waiting - 1; i++) {
+				gR.append(" " + i + ". " + this.reservations[i]);
+			}
+			
+		}
+		
+		//Convert to string and return
+		return gR.toString();
+	}
+	
+	//Get the current driver/renter
+	public String getCurrent() {
+		return this.reservations[0];
+	}
+	
+	//Mutators
+	public void setManufacturer(Manufacturer mM) {
+		if(mM != null) {
+			this.manufacturer = mM;
+		}else {
+			this.manufacturer = Manufacturer.OTHER;
+		}
+	}
+	
+	public void setModel(String sM) {
+		if(sM != null && !sM.isEmpty()) {
+			this.model = sM;
+		}
+	}
+	
+	public void setYear(int iY) {
+		if(iY >= 1900) {
+			this.year = iY;
+		}
+	}
+	
+	public void setColor(Color cC) {
+		if(cC != null) {
+			this.color = cC;
+		}else {
+			this.color = Color.OTHER;
+		}
+	}
+	
+	public void setPrice(double dP) {
+		if(dP >= 0) {
+			this.price = dP;
+		}else {
+			this.price = 100.00;
+		}
+	}
+	
+	public void setNumberOfSeats(int iN) {
+		if(iN > 0) {
+			this.numberOfSeats = iN;
+		}else {
+			this.numberOfSeats = 4;
+		}
+	}
+	
+	public void setStatus(Status sS) {
+		if(sS != null) {
+			this.status = sS;
+		}else {
+			this.status = Status.WORKING;
+		}
+	}
+	
+	public void setGasTankSize(int iG) {
+		if(iG >= 0) {
+			this.gasTankSize = iG;
+		}else {
+			this.gasTankSize = 12;
+		}
+	}
+	
+	public void setMiles(int iM) {
+		if(iM >= 0) {
+			this.miles = iM;
+		}else {
+			this.miles = 0;
+		}
+	}
+	
+	//Availability and Reservation Mutators
+	public void setAvailablility() {
+		if(this.waiting == 0 && this.status == Status.WORKING) {
+			this.available = true;
+		}else {
+			this.available = false;
+		}
+	}
+	
+	//Add a string (name) to reservations array
+	public void addReservation(String sR) {
+		if(sR != null && !sR.isEmpty()) {
+			this.reservations[this.waiting] = sR;
+		}
+		
+		//Update availability
+		this.setAvailablility();
+	}
+	
+	//Remove the current reservation
+	public void removeReservation() {
+		
+		//Overwrites current renter/driver
+		for(int i = 0; i < waiting - 1; i++) {
+			reservations[i] = reservations[i+1];
+		}
+		
+		//Update availability
+		this.setAvailablility();
+	}
+	
+	//Remove name from array
+	public void removeReservation(String sN) {
+		for(int i = 0; i < this.waiting; i++) {
+			if(sN.equalsIgnoreCase(this.reservations[i])) {
+				
+				//Might break if removing reservations[9]??
+				for(int j = i; j < waiting - 1; j++) {
+					reservations[i] = reservations[i+1];
+				}
+				
+				break;
+			}
+		}
+	}
+	
+	//ToString Method(s?) (Placeholder)
+	public String toString() {
+		return "";
+	}
+	
+	
+	
+	
+	
+	
+	
+
+}

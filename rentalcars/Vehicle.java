@@ -2,8 +2,10 @@ package rentalcars;
 
 public class Vehicle {
 	
+	private static final int MAX_RESERVATIONS = 10;
+	
+	private String id;
 	private Manufacturer manufacturer;
-	private String model;
 	private int year;
 	private Color color;
 	private double price;
@@ -18,8 +20,8 @@ public class Vehicle {
 
 	//Default Constructor
 	public Vehicle() {
+		this.id = "99999999";
 		this.manufacturer = Manufacturer.OTHER;
-		this.model = "Unknown";
 		this.year = 2000;
 		this.color = Color.OTHER;
 		this.price = 100.00;
@@ -28,13 +30,14 @@ public class Vehicle {
 		this.available = true;
 		this.gasTankSize = 12;
 		this.miles = 0;
+		this.reservations = new String[MAX_RESERVATIONS];
 		this.waiting = 0;
 	}
 	
 	//Parameterized Constructor
-	public Vehicle(Manufacturer mM, String sM, int iY, Color cC, double dP, int iN, Status sS, int iG, int iM) {
+	public Vehicle(String sI, Manufacturer mM, String sM, int iY, Color cC, double dP, int iN, Status sS, int iG, int iM) {
+		this.setId(sI);
 		this.setManufacturer(mM);
-		this.setModel(sM);
 		this.setYear(iY);
 		this.setColor(cC);
 		this.setPrice(dP);
@@ -42,18 +45,19 @@ public class Vehicle {
 		this.setStatus(sS);
 		this.setGasTankSize(iG);
 		this.setMiles(iM);
+		this.reservations = new String[MAX_RESERVATIONS];
 		this.available = true;
 		this.waiting = 0;
 	}
 	
 	
 	//Accessors
-	public Manufacturer getManufacturer() {
-		return this.manufacturer;
+	public String getId() {
+		return this.id;
 	}
 	
-	public String getModel() {
-		return this.model;
+	public Manufacturer getManufacturer() {
+		return this.manufacturer;
 	}
 	
 	public int getYear() {
@@ -76,7 +80,7 @@ public class Vehicle {
 		return this.status;
 	}
 	
-	public boolean getAvailable() {
+	public boolean isAvailable() {
 		return this.available;
 	}
 	
@@ -86,6 +90,10 @@ public class Vehicle {
 	
 	public int getMiles() {
 		return this.miles;
+	}
+	
+	public int getWaiting() {
+		return this.waiting;
 	}
 	
 	//Return all reserved users/names
@@ -99,14 +107,14 @@ public class Vehicle {
 		}
 		
 		//Print current user
-		gR.append("Current : " + this.reservations[0]);
+		gR.append("Current: " + this.reservations[0]);
 		
 		//Only print if there are people in the waiting reservation
 		if(this.waiting > 1) {
 			gR.append(" Waiting:");
 			
 			//Add each one in waiting
-			for(int i = 1; i <= waiting - 1; i++) {
+			for(int i = 1; i < waiting; i++) {
 				gR.append(" " + i + ". " + this.reservations[i]);
 			}
 			
@@ -118,21 +126,28 @@ public class Vehicle {
 	
 	//Get the current driver/renter
 	public String getCurrent() {
-		return this.reservations[0];
+		
+		if(getWaiting() > 0 && (this.reservations[0] != null && !this.reservations[0].isEmpty())) {
+			return this.reservations[0];
+		}else {
+			return "No reservations";
+		}
 	}
 	
 	//Mutators
+	public void setId(String sI) {
+		if(sI != null && !sI.isEmpty()) {
+			this.id = sI;
+		}else {
+			this.id = "99999999";
+		}
+	}
+	
 	public void setManufacturer(Manufacturer mM) {
 		if(mM != null) {
 			this.manufacturer = mM;
 		}else {
 			this.manufacturer = Manufacturer.OTHER;
-		}
-	}
-	
-	public void setModel(String sM) {
-		if(sM != null && !sM.isEmpty()) {
-			this.model = sM;
 		}
 	}
 	
@@ -190,8 +205,8 @@ public class Vehicle {
 		}
 	}
 	
-	//Availability and Reservation Mutators
-	public void setAvailablility() {
+	//Update Availability Boolean
+	public void updateAvailability() {
 		if(this.waiting == 0 && this.status == Status.WORKING) {
 			this.available = true;
 		}else {
@@ -199,41 +214,74 @@ public class Vehicle {
 		}
 	}
 	
+	//Reservation Mutators
 	//Add a string (name) to reservations array
 	public void addReservation(String sR) {
-		if(sR != null && !sR.isEmpty()) {
+		if(sR != null && !sR.isEmpty() && this.waiting < MAX_RESERVATIONS) {
 			this.reservations[this.waiting] = sR;
-		}
 		
-		//Update availability
-		this.setAvailablility();
+		
+			//Decrease waiting
+			this.waiting  = this.waiting + 1;
+			
+			//Update availability
+			this.updateAvailability();
+		}
 	}
 	
 	//Remove the current reservation
 	public void removeReservation() {
 		
-		//Overwrites current renter/driver
-		for(int i = 0; i < waiting - 1; i++) {
-			reservations[i] = reservations[i+1];
-		}
+		if(this.waiting > 0) {
 		
-		//Update availability
-		this.setAvailablility();
+			//Overwrites current renter/driver
+			for(int i = 0; i < waiting - 1; i++) {
+				reservations[i] = reservations[i+1];
+			}
+			
+			//Remove duplicated 
+			this.reservations[this.waiting - 1 ] = null;
+			
+			//Decrease waiting
+			this.waiting  = this.waiting - 1;
+			
+			//Update availability 
+			this.updateAvailability();
+			
+		}
 	}
 	
 	//Remove name from array
 	public void removeReservation(String sN) {
-		for(int i = 0; i < this.waiting; i++) {
+		
+		if(sN == null || sN.isEmpty()) {
+			return;
+		}
+		
+		boolean replace = false;
+		
+		for(int i = 0; i < this.waiting && !replace; i++) { 
+			
 			if(sN.equalsIgnoreCase(this.reservations[i])) {
 				
-				//Might break if removing reservations[9]??
-				for(int j = i; j < waiting - 1; j++) {
-					reservations[i] = reservations[i+1];
-				}
+				replace = true;
 				
-				break;
+				for(int j = i; j < this.waiting - 1; j++) {
+					this.reservations[j] = this.reservations[j+1];
+				}
 			}
 		}
+		
+		if(replace) {
+			this.reservations[this.waiting - 1 ] = null;
+			
+			//Decrease waiting
+			this.waiting  = this.waiting - 1;
+		}
+				
+		//Update availability 
+		this.updateAvailability();
+		
 	}
 	
 	//ToString Method(s?) (Placeholder)

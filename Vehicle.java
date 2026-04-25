@@ -13,7 +13,6 @@ public class Vehicle {
 	private Status status;
 	private boolean available;
 	private int gasTankSize;
-	private int miles;
 	private String[] reservations;
 	private int waiting;
 	
@@ -29,13 +28,12 @@ public class Vehicle {
 		this.status = Status.WORKING;
 		this.available = true;
 		this.gasTankSize = 12;
-		this.miles = 0;
 		this.reservations = new String[MAX_RESERVATIONS];
 		this.waiting = 0;
 	}
 	
 	//Parameterized Constructor
-	public Vehicle(String sL, Manufacturer mM, String sM, int iY, Color cC, double dP, int iN, Status sS, int iG, int iM) {
+	public Vehicle(String sL, Manufacturer mM, String sM, int iY, Color cC, double dP, int iN, Status sS, int iG) {
 		this.setLicensePlate(sL);
 		this.setManufacturer(mM);
 		this.setYear(iY);
@@ -44,7 +42,6 @@ public class Vehicle {
 		this.setNumberOfSeats(iN);
 		this.setStatus(sS);
 		this.setGasTankSize(iG);
-		this.setMiles(iM);
 		this.reservations = new String[MAX_RESERVATIONS];
 		this.available = true;
 		this.waiting = 0;
@@ -86,10 +83,6 @@ public class Vehicle {
 	
 	public int getGasTankSize() {
 		return this.gasTankSize;
-	}
-	
-	public int getMiles() {
-		return this.miles;
 	}
 	
 	public int getWaiting() {
@@ -194,14 +187,6 @@ public class Vehicle {
 			this.gasTankSize = iG;
 		}else {
 			this.gasTankSize = 12;
-		}
-	}
-	
-	public void setMiles(int iM) {
-		if(iM >= 0) {
-			this.miles = iM;
-		}else {
-			this.miles = 0;
 		}
 	}
 	

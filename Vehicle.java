@@ -4,7 +4,7 @@ public class Vehicle {
 	
 	private static final int MAX_RESERVATIONS = 10;
 	
-	private String id;
+	private String licensePlate;
 	private Manufacturer manufacturer;
 	private int year;
 	private Color color;
@@ -20,7 +20,7 @@ public class Vehicle {
 
 	//Default Constructor
 	public Vehicle() {
-		this.id = "99999999";
+		this.licensePlate = "~~~~~~~";
 		this.manufacturer = Manufacturer.OTHER;
 		this.year = 2000;
 		this.color = Color.OTHER;
@@ -35,8 +35,8 @@ public class Vehicle {
 	}
 	
 	//Parameterized Constructor
-	public Vehicle(String sI, Manufacturer mM, String sM, int iY, Color cC, double dP, int iN, Status sS, int iG, int iM) {
-		this.setId(sI);
+	public Vehicle(String sL, Manufacturer mM, String sM, int iY, Color cC, double dP, int iN, Status sS, int iG, int iM) {
+		this.setLicensePlate(sL);
 		this.setManufacturer(mM);
 		this.setYear(iY);
 		this.setColor(cC);
@@ -52,8 +52,8 @@ public class Vehicle {
 	
 	
 	//Accessors
-	public String getId() {
-		return this.id;
+	public String getLicensePlate() {
+		return this.licensePlate;
 	}
 	
 	public Manufacturer getManufacturer() {
@@ -135,11 +135,11 @@ public class Vehicle {
 	}
 	
 	//Mutators
-	public void setId(String sI) {
-		if(sI != null && !sI.isEmpty()) {
-			this.id = sI;
+	public void setLicensePlate(String sL) {
+		if(sL != null && !sL.isEmpty()) {
+			this.licensePlate = sL;
 		}else {
-			this.id = "99999999";
+			this.licensePlate = "~~~~~~~";
 		}
 	}
 	

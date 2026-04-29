@@ -2,7 +2,7 @@ package rentalcars;
 
 public class VehicleManager {
     private Vehicle[] vehicles;
-    public static final int DEFSIZE = 10;
+    public static final int DEFSIZE = 100;
 
     public VehicleManager() {
         init(DEFSIZE);

@@ -136,6 +136,25 @@ public class VehicleManager {
     	
     	return removed;
     }
+    void sortByPrice(Vehicle[] vehicles, Vehicle[] displayArray, boolean hideUnavailable) {
+        
+        int index = 0;
+        
+        for (Vehicle v : vehicles) {
+            if (v != null) {
+                if (!hideUnavailable || v.isAvailable()) {
+                    displayArray[index] = v;
+                    index++;
+                }
+            }
+        }
+        
+        for (int i = index; i < displayArray.length; i++) {
+            displayArray[i] = null;
+        }
+        
+        sortByPriceHelper(displayArray);
+    }
     
     public Vehicles[] getAllVehicles() {
         return vehicles;

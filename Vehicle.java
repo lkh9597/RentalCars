@@ -33,7 +33,7 @@ public class Vehicle {
 	}
 	
 	//Parameterized Constructor
-	public Vehicle(String sL, Manufacturer mM, String sM, int iY, Color cC, double dP, int iN, Status sS, int iG) {
+	public Vehicle(String sL, Manufacturer mM, int iY, Color cC, double dP, int iN, Status sS, int iG) {
 		this.setLicensePlate(sL);
 		this.setManufacturer(mM);
 		this.setYear(iY);
@@ -120,7 +120,7 @@ public class Vehicle {
 	//Get the current driver/renter
 	public String getCurrent() {
 		
-		if(getWaiting() > 0 && (this.reservations[0] != null && !this.reservations[0].isEmpty())) {
+		if(getWaiting() > 0 && this.reservations[0] != null && !this.reservations[0].isEmpty()) {
 			return this.reservations[0];
 		}else {
 			return "No reservations";
@@ -147,6 +147,8 @@ public class Vehicle {
 	public void setYear(int iY) {
 		if(iY >= 1900) {
 			this.year = iY;
+		}else {
+			this.year = 2000;
 		}
 	}
 	
@@ -180,6 +182,8 @@ public class Vehicle {
 		}else {
 			this.status = Status.WORKING;
 		}
+		
+		updateAvailability();
 	}
 	
 	public void setGasTankSize(int iG) {
@@ -269,10 +273,51 @@ public class Vehicle {
 		
 	}
 	
-	//ToString Method(s?) (Placeholder)
+	//ToString Simplified
 	public String toString() {
-		return "";
+		String availabilityText;
+		
+		if(this.isAvailable()) {
+			availabilityText =  "Free";
+		}else {
+			availabilityText = "Rented";
+		}
+
+	    return String.format(
+	        "%-7s: %-10s | %-8s | Price: $%8.2f | Seats: %2d | Status: %-10s",
+	        "Vehicle",
+	        this.getLicensePlate(),
+	        availabilityText,
+	        this.getPrice(),
+	        this.getNumberOfSeats(),
+	        this.getStatus()
+	    );
 	}
+	
+	public String toStringAll() {
+		
+		String availabilityText;
+		
+		if(this.isAvailable()) {
+			availabilityText =  "Free";
+		}else {
+			availabilityText = "Rented";
+		}
+		
+		return "License Plate: " + this.getLicensePlate() +
+		           "\nManufacturer: " + this.getManufacturer() +
+		           "\nYear: " + this.getYear() +
+		           "\nColor: " + this.getColor() +
+		           "\nPrice: $" + String.format("%.2f", this.getPrice()) +
+		           "\nNumber of Seats: " + this.getNumberOfSeats() +
+		           "\nStatus: " + this.getStatus() +
+		           "\nAvailability: " + availabilityText +
+		           "\nGas Tank Size: " + this.getGasTankSize() +
+		           "\nReservations: " + this.getReservations();
+	}
+	
+	
+	
 	
 	
 	

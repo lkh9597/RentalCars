@@ -409,7 +409,7 @@ public class VehicleManagerFE_GUI {
     }
 
     private static void removeVehicle() {
-        String licensePlate = licensePlateField.getText();
+        String licensePlate = removeVehicleField.getText();
         vehicleManager.removeVehicle(licensePlate);
 
         JOptionPane.showMessageDialog(

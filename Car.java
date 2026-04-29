@@ -13,9 +13,9 @@ public class Car extends Vehicles {
 
     public Car(String name, Manufacturer manufacturer, int year, Color color,
                double price, int numberOfSeats, Status status,
-               int gasTankSize, int miles, double gasMileage, Type type) {
+               int gasTankSize, double gasMileage, Type type) {
 
-        super(name, manufacturer, year, color, price, numberOfSeats, status, gasTankSize, miles);
+        super(name, manufacturer, year, color, price, numberOfSeats, status, gasTankSize);
         this.setGasMileage(gasMileage);
         this.setType(type);
     }
@@ -44,10 +44,34 @@ public class Car extends Vehicles {
         }
     }
 
+    @Override
     public String toString() {
-        return "CAR\n" +
-               super.toString() +
-               "\nGas Mileage: " + this.gasMileage +
-               "\nType: " + this.type;
+        String availabilityText;
+		
+		if(this.isAvailable()) {
+			availabilityText =  "Free";
+		}else {
+			availabilityText = "Rented";
+		}
+
+	    return String.format(
+	        "%-7s: %-10s | %-8s | Price: $%8.2f | Seats: %2d | MPG: %5.1f | Type: %-10s | Status: %-10s",
+	        "Car",
+	        this.getLicensePlate(),
+	        availabilityText,
+	        this.getPrice(),
+	        this.getNumberOfSeats(),
+	        this.getGasMileage(),
+	        this.getType(),
+	        this.getStatus()
+	    );
+    }
+    
+    @Override
+    public String toStringAll() {
+    	
+    	return super.toStringAll() +
+    		   "\nGas Mileage: " + this.getGasMileage() +
+    	       "\nType: " + this.getType();
     }
 }

@@ -438,7 +438,10 @@ public class VehicleManagerFE_GUI {
     	listPanel.removeAll();
     	
     	for(int i = 0; i < displayArray.length; i++) {
-    		listPanel.add(createVehicleDisplayRow(displayArray[i]));
+    		if(displayArray[i] != null) {
+    			listPanel.add(createVehicleDisplayRow(displayArray[i]));
+    		}
+    	};
     	}
     	
     	listPanel.revalidate();

@@ -11,7 +11,7 @@ public class VehicleManagerFE_GUI {
     private static JPanel listPanel;
     
     //Display array
-    private static Vehicle[] displayArray = new Vehicle[20];
+    private static Vehicle[] displayArray = new Vehicle[100];
     
    
     private static JTextField licensePlateField, yearField, priceField, numberOfSeatsField, gasTankSizeField, gasMilageField, cargoCapacityField, loadCapacityField,removeVehicleField;
